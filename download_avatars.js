@@ -1,3 +1,7 @@
+
+var owner = String(process.argv[2]);
+var repo = String(process.argv[3]);
+
 var request = require('request'); // getting the request lib
 var fs = require('fs');
 console.log('Welcome to the Github Avatar Downloader!');
@@ -7,9 +11,14 @@ const GITHUB_TOKEN = "f75e68bad236949c50d9a4206ccd02e1f4996d24";
 const UserAgent = "DP27";
 
 
-function getRepoContributors(repoOwner, repoName, cb) {
+function getRepoContributors(repoOwner, repoName, cb) {// function implementing making a request to the url and invoking the callback function after fetching the data using request(npm API).
 
   //requestURL = 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors';
+
+  if(repoOwner == 'undefined' || repoName == 'undefined'){
+    throw "Please provide repoOwner and repoName as parameters through console."
+    return null;
+  }
   var result = {};
   const options = {
     url: 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors',
@@ -31,7 +40,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
 
 
 
-getRepoContributors("jquery", "jquery", function(err, result) {
+getRepoContributors(owner, repo, function(err, result) {// calling functions getrepcontributors and downloadImage. downloadImage function called after the callback function returns.
   console.log("Errors:", err);
   console.log("Result:", result);
   var avatarArray = [];
@@ -45,7 +54,7 @@ getRepoContributors("jquery", "jquery", function(err, result) {
 
 
 
-function downloadImageByURL(url, filePath) {
+function downloadImageByURL(url, filePath) {// making request for the url and downloading the images in the provided filepath.
   // ...
   for(var i in url){
     request.get(url[i])
